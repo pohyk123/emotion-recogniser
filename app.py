@@ -135,8 +135,24 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, threaded=True)
+if __name__ == "__main__":
+    if 'DYNO' not in os.environ:
+        logFormatter = logging.Formatter("%(asctime)s [%(filename)s] [%(funcName)s] [%(lineno)d] [%(levelname)-5.5s]  %(message)s")
+        rootLogger = logging.getLogger()
+
+        rootLogger.setLevel(logging.INFO)
+
+        fileHandler = logging.FileHandler("team.log")
+        fileHandler.setFormatter(logFormatter)
+        rootLogger.addHandler(fileHandler)
+
+        consoleHandler = logging.StreamHandler()
+        consoleHandler.setFormatter(logFormatter)
+        rootLogger.addHandler(consoleHandler)
+
+        # logger.info("Starting application ...")
+    app.run()
+    # app.run(debug=True)
 
 # cap.release()
 # cv2.destroyAllWindows()
