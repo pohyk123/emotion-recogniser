@@ -1,8 +1,10 @@
+![Alt text](https://drive.google.com/open?id=149VKCfH1xWD9WfHSMXSkMIKLxp2IpMSl)
+
 # Emotion Recogniser
 
 Run: python app.py
 
-View live video-feed on: http://localhost:5000
+View live video-feed with your favourite memes on: http://localhost:5000
 
 ## References:
 - Emotion: https://github.com/petercunha/Emotion
