@@ -1,4 +1,4 @@
-![Alt text](https://drive.google.com/open?id=149VKCfH1xWD9WfHSMXSkMIKLxp2IpMSl)
+![Alt text](https://lh3.googleusercontent.com/U2tRtz0rJb6lmKE7p8EF4JaB6huhPWlUEfDHm4JqdJ_JMbcPqb1LIctZsOfKpYW9cF8fh3FMso8u2Xwv4zJi=w1920-h969-rw)
 
 # Emotion Recogniser
 
