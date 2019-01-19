@@ -1,5 +1,4 @@
 # Emotion Recogniser
-====================
 
 Run: python app.py
 
