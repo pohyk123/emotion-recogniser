@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# license removed for brevity
+# A simple video-streaming web app that tells your emotions using memes.
+# Created by Poh Yong Keat 2018
+
 import cv2
 import json
 import numpy as np
@@ -12,7 +16,6 @@ from utils.inference import draw_bounding_box
 from utils.inference import apply_offsets
 from utils.inference import load_detection_model
 from utils.preprocessor import preprocess_input
-
 from flask import Flask, render_template, Response
 import os
 from os import listdir
@@ -29,7 +32,6 @@ USE_WEBCAM = True # If false, loads video file source
 def index():
     """Video streaming home page."""
     return render_template('index.html')
-
 
 def gen():
     """Video streaming generator function."""
@@ -139,27 +141,12 @@ def video_feed():
 
 @app.route('/generate_meme')
 def generate_meme():
+    """Meme Generation route. Outputs json object with meme image path as url."""
     path = join(os.getcwd(),'static\images',emotion)
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     x = int(np.random.rand() * len(onlyfiles))
-    print(x)
-    print(onlyfiles)
     imgPath = './static/images/'+emotion+'/'+onlyfiles[x]
-    print(imgPath)
     return jsonify({'url':imgPath})
-    # return Response(imgPath,mimetype='image/jpeg')
-
-    # return json.dumps({'url':imgPath}), 200, {'Content-Type':'application/json'}
-
-    # resp = Flask.make_response(open(imgPath).read())
-    # resp.content_type = "image/jpeg"
-    # return resp
-
-@app.route('/switch')
-def switch():
-    global emotion
-    emotion = 'anger'
-    return "switched"
 
 if __name__ == '__main__':
     app.run()
