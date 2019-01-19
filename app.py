@@ -1,19 +1,18 @@
-import cv2
-import numpy as np
-from keras.models import load_model
-from statistics import mode
-from utils.datasets import get_labels
-from utils.inference import detect_faces
-from utils.inference import draw_text
-from utils.inference import draw_bounding_box
-from utils.inference import apply_offsets
-from utils.inference import load_detection_model
-from utils.preprocessor import preprocess_input
+# import cv2
+# import numpy as np
+# from keras.models import load_model
+# from statistics import mode
+# from utils.datasets import get_labels
+# from utils.inference import detect_faces
+# from utils.inference import draw_text
+# from utils.inference import draw_bounding_box
+# from utils.inference import apply_offsets
+# from utils.inference import load_detection_model
+# from utils.preprocessor import preprocess_input
 
 
 #!/usr/bin/env python
 from flask import Flask, render_template, Response
-import cv2
 
 app = Flask(__name__)
 global cap
@@ -128,11 +127,11 @@ def index():
 #                b'Content-Type: image/jpeg\r\n\r\n' + open('t.jpg', 'rb').read() + b'\r\n')
 #
 #
-@app.route('/video_feed')
-def video_feed():
-    """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+# @app.route('/video_feed')
+# def video_feed():
+#     """Video streaming route. Put this in the src attribute of an img tag."""
+#     return Response(gen(),
+#                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 if __name__ == "__main__":
