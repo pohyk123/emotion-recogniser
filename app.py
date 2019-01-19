@@ -1,5 +1,8 @@
+#!/usr/bin/env python
 import cv2
+import json
 import numpy as np
+from flask import jsonify
 from keras.models import load_model
 from statistics import mode
 from utils.datasets import get_labels
@@ -10,12 +13,15 @@ from utils.inference import apply_offsets
 from utils.inference import load_detection_model
 from utils.preprocessor import preprocess_input
 
-
-#!/usr/bin/env python
 from flask import Flask, render_template, Response
+import os
+from os import listdir
+from os.path import isfile, join
 
 app = Flask(__name__)
 global cap
+global emotion
+emotion = 'neutral'
 
 USE_WEBCAM = True # If false, loads video file source
 
@@ -27,8 +33,8 @@ def index():
 
 def gen():
     """Video streaming generator function."""
-
     global cap
+    global emotion
 
     # parameters for loading data and images
     emotion_model_path = './models/emotion_model.hdf5'
@@ -49,8 +55,9 @@ def gen():
     emotion_window = []
 
     # starting video streaming
-
     cv2.namedWindow('window_frame')
+
+    # Uncomment this to show a popup window
     cv2.destroyAllWindows()
     video_capture = cv2.VideoCapture(0)
 
@@ -63,9 +70,6 @@ def gen():
 
     while cap.isOpened(): # True:
         ret, bgr_image = cap.read()
-
-        #bgr_image = video_capture.read()[1]
-
         gray_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
         rgb_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2RGB)
 
@@ -97,6 +101,9 @@ def gen():
             except:
                 continue
 
+            emotion = emotion_text
+            print(emotion)
+
             if emotion_text == 'angry':
                 color = emotion_probability * np.asarray((255, 0, 0))
             elif emotion_text == 'sad':
@@ -120,12 +127,9 @@ def gen():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    # while True:
-    #     rval, frame = vc.read()
+        # write annotated images to jpg, then output to web browser
         cv2.imwrite('t.jpg', bgr_image)
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + open('t.jpg', 'rb').read() + b'\r\n')
-
-    cap.release()
 
 @app.route('/video_feed')
 def video_feed():
@@ -133,9 +137,33 @@ def video_feed():
     return Response(gen(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/generate_meme')
+def generate_meme():
+    path = join(os.getcwd(),'static\images',emotion)
+    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+    x = int(np.random.rand() * len(onlyfiles))
+    print(x)
+    print(onlyfiles)
+    imgPath = './static/images/'+emotion+'/'+onlyfiles[x]
+    print(imgPath)
+    return jsonify({'url':imgPath})
+    # return Response(imgPath,mimetype='image/jpeg')
+
+    # return json.dumps({'url':imgPath}), 200, {'Content-Type':'application/json'}
+
+    # resp = Flask.make_response(open(imgPath).read())
+    # resp.content_type = "image/jpeg"
+    # return resp
+
+@app.route('/switch')
+def switch():
+    global emotion
+    emotion = 'anger'
+    return "switched"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, threaded=True)
+    app.run()
 
+# release cv & cam resources
 cap.release()
 cv2.destroyAllWindows()
