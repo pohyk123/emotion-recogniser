@@ -8,8 +8,14 @@
   </head>
 
   <body>
+    <iframe src="../static/music/silence.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+    <audio id="player" autoplay loop>
+        <source src="../static/music/nyan-cat-audio.mp3" type="audio/mp3">
+    </audio>
+
     <center>
     <h1>Emotion Recognition</h1>
+    Presented to you by Team Rojak
     <p/><br><br>
 
     <img src="{{ url_for('video_feed') }}"></src>
@@ -31,6 +37,6 @@
         setInterval(fetchdata,2000);
       });
     </script>
-    
+
   </body>
 </html>
